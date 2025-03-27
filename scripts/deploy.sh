@@ -30,9 +30,14 @@ fi
   git checkout production
   git reset --hard origin/production
   
-  echo "🛠 (Re)create and start containers..."
+  echo "🛠 Recreating containers..."
   docker compose pull
-  docker compose up -d
+  docker compose up -d --force-recreate
+
+  if [ "$(docker inspect -f '{{.State.ExitCode}}' proxy)" -ne 0 ]; then
+    echo "❌ Error starting container"
+    exit 1
+  fi
 
   echo "✅ Deployment completed!"
 } 2>&1 | tee "$LOG_FILE"
