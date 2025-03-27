@@ -34,10 +34,9 @@ fi
   docker compose pull
   docker compose up -d --force-recreate
 
-  if [ "$(docker inspect -f '{{.State.ExitCode}}' proxy)" -ne 0 ]; then
-    echo "❌ Error starting container"
-    exit 1
-  fi
-
   echo "✅ Deployment completed!"
 } 2>&1 | tee "$LOG_FILE"
+
+# Exit with the same status as the last command
+STATUS=${PIPESTATUS[0]}
+exit $STATUS
