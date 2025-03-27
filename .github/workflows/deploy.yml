@@ -15,4 +15,6 @@ jobs:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: ${{ vars.PROJECT_PATH }}/scripts//deploy.sh
+          script: |
+            set -euxo pipefail
+            ${{ vars.PROJECT_PATH }}/scripts//deploy.sh
