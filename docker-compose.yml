@@ -1,5 +1,7 @@
 include:
   - services/proxy.yml
+  - services/redis.yml
+  - services/registry.yml
 
 networks:
   default:

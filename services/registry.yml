@@ -1,0 +1,14 @@
+services:
+  registry:
+    image: registry:2
+    container_name: registry
+    hostname: registry
+    restart: always
+    environment:
+      REGISTRY_HTTP_SECRET: ${REGISTRY_HTTP_SECRET}
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry
+    volumes:
+      - ${DOCKER_DATA-../data}/registry/auth:/auth
+      - ${DOCKER_DATA-../data}/registry/data:/var/lib/registry
