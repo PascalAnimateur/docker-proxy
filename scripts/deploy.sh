@@ -1,17 +1,21 @@
 #!/bin/bash
-set -e
+
 
 # Ensure the script is run from the root of the project
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR/.."
 
-# Ensure the logs directory exists
+# Create logs directory and backup previous log file
 mkdir -p logs
 LOG_FILE="logs/deploy.log"
-touch "$LOG_FILE"
+if [ -f "$LOG_FILE" ]; then
+  LAST_TIMESTAMP=$(date -r "$LOG_FILE" +"%Y-%m-%d_%Hh%M")
+  mv "$LOG_FILE" "logs/deploy-$LAST_TIMESTAMP.log"
+fi
 
-# Redirect stdout and stderr to the log file
 {
+  set -euxo pipefail
+
   echo "🚀 Deploying infrastructure..."
   
   # Default network
@@ -30,4 +34,4 @@ touch "$LOG_FILE"
   docker compose up -d
   
   echo "✅ Deployment completed!"
-} | tee -a "$LOG_FILE"
+} 2>&1 | tee "$LOG_FILE"
