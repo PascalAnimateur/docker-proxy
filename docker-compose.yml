@@ -1,0 +1,7 @@
+include:
+  - services/proxy.yml
+
+networks:
+  default:
+    external:
+      name: proxy
