@@ -18,7 +18,6 @@ fi
 
   echo "🚀 Deploying infrastructure..."
   
-  # Default network
   echo "🌐 Creating default network..."
   docker network inspect proxy >/dev/null 2>&1 || docker network create \
     --driver=bridge \
@@ -27,11 +26,13 @@ fi
     proxy
   
   echo "⬇️ Pulling latest changes from Git..."
-  git pull origin production
+  git fetch origin
+  git checkout production
+  git reset --hard origin/production
   
   echo "🛠 (Re)create and start containers..."
   docker compose pull
   docker compose up -d
-  
+
   echo "✅ Deployment completed!"
 } 2>&1 | tee "$LOG_FILE"
